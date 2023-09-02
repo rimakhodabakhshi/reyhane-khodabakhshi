@@ -1,25 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {Component} from "react";
+import axios from 'axios';
+import Card from "./components/Card";
+                              
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+
+class products extends Component {
+
+  constructor(props) {
+       super(props)
+       this.state = {
+              products: []
+      }
+   }
+
+   componentDidMount() {
+       axios.get("https://fakestoreapi.com/products")
+       .then(response => this.setState({
+          products: response.data,
+       }))
+   }
+
+
+  render() {
+     const {products } = this.state
+     return (
+      <div>
+        
+        <div >
+             {
+               products.length ?
+               products.map(product => <Card key={product.id} image={product.image} cost={`${product.price} $`}/>) :
+               <h1>loading...</h1>
+             }
+             {products.map(product => <Card key={product.id} image={product.image} cost={`${product.price} $`}/>)}
+        </div>
+        
+      </div>
+     ); 
+
+   
+  }
 }
 
-export default App;
+
+export default products;
